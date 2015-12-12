@@ -49,14 +49,25 @@ public class SquatDecisioner implements Decision<AdvancedMurderBot.GameContext, 
         List<GameState.Hero> heroes = new ArrayList(context.getGameState().getHeroesById().values());
         List<Integer> coinValues = new ArrayList<Integer>();
 
+
         for(GameState.Hero hero: heroes){
           if(hero.getId() != me.getId())
             coinValues.add(hero.getGold());
+
+        List<Integer> mineCounts = new ArrayList<Integer>();
+
+        for(GameState.Hero hero: heroes){
+          if(hero.getId() != me.getId()){
+            coinValues.add(hero.getGold());
+            mineCounts.add(hero.getMineCount());
+          }
         }
 
 
         // Do we need to move to get there?
-        if(null == nearestPubDijkstraResult || (me.getGold() > Collections.max(coinValues))) {
+        if(null == nearestPubDijkstraResult || (me.getGold() > Collections.max(coinValues) &&
+                                                me.getMineCount() > Collections.max(mineCounts))) {
+
             return BotMove.STAY;
         } else if(nearestPubDijkstraResult.getDistance() > 1) {
             AdvancedMurderBot.DijkstraResult currentResult = nearestPubDijkstraResult;
