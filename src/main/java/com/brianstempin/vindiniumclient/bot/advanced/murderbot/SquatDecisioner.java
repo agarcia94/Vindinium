@@ -8,6 +8,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Collections;
 
 /**
  * Decides if we should be lame and squat.  Also known as, "turtling."
@@ -43,8 +46,17 @@ public class SquatDecisioner implements Decision<AdvancedMurderBot.GameContext, 
             }
         }
 
+        List<GameState.Hero> heroes = new ArrayList(context.getGameState().getHeroesById().values());
+        List<Integer> coinValues = new ArrayList<Integer>();
+
+        for(GameState.Hero hero: heroes){
+          if(hero.getId() != me.getId())
+            coinValues.add(hero.getGold());
+        }
+
+
         // Do we need to move to get there?
-        if(null == nearestPubDijkstraResult) {
+        if(null == nearestPubDijkstraResult || (me.getGold() > Collections.max(coinValues))) {
             return BotMove.STAY;
         } else if(nearestPubDijkstraResult.getDistance() > 1) {
             AdvancedMurderBot.DijkstraResult currentResult = nearestPubDijkstraResult;
@@ -60,7 +72,7 @@ public class SquatDecisioner implements Decision<AdvancedMurderBot.GameContext, 
         }
 
         // Ok, we must be there.  Do we need health?
-        if(me.getLife() < 50) {
+        if(me.getLife() < 45) {
             logger.info("Getting health while squatting.");
             return BotUtils.directionTowards(me.getPos(), nearestPub.getPosition());
         }

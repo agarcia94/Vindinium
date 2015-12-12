@@ -35,7 +35,8 @@ public class BotTargetingDecisioner implements Decision<AdvancedMurderBot.GameCo
 
         // Are there a crashed bot with mines we can take advantage of?
         for(Mine currentMine : context.getGameState().getMines().values()) {
-            if(currentMine.getOwner() != null && currentMine.getOwner().isCrashed()) {
+            if(currentMine.getOwner() != null && (currentMine.getOwner().isCrashed()
+            && me.getLife() > 35)) {
 
                 GameState.Hero target = currentMine.getOwner();
                 AdvancedMurderBot.DijkstraResult currentDijkstraResult =
