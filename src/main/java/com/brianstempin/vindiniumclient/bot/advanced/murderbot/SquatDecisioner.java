@@ -53,11 +53,12 @@ public class SquatDecisioner implements Decision<AdvancedMurderBot.GameContext, 
         for(GameState.Hero hero: heroes){
           if(hero.getId() != me.getId())
             coinValues.add(hero.getGold());
+        }
 
         List<Integer> mineCounts = new ArrayList<Integer>();
 
         for(GameState.Hero hero: heroes){
-          if(hero.getId() != me.getId()){
+          if(hero.getId() != hero.getId()){
             coinValues.add(hero.getGold());
             mineCounts.add(hero.getMineCount());
           }
@@ -92,4 +93,4 @@ public class SquatDecisioner implements Decision<AdvancedMurderBot.GameContext, 
         logger.info("Squatting at pub.");
         return BotMove.STAY;
     }
-}
+  }
